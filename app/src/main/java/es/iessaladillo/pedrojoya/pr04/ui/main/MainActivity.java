@@ -65,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
         iconListeners();
 
         //When pressing avatar image or name.
+        avatarListeners();
+    }
+
+    private void avatarListeners() {
         imgAvatar.setOnClickListener(v -> {
 
         });
@@ -74,15 +78,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void iconListeners() {
+        //EMAIL
         imgEmail.setOnClickListener(v -> {
-            intention = new Intent();
-            intention.setAction(Intent.ACTION_SEND);
-            intention.putExtra(Intent.EXTRA_EMAIL, txtEmail.getText());
+            intention = new Intent(Intent.ACTION_SENDTO);
+            intention.setData(Uri.parse("mailto:" + txtEmail.getText()));
             startActivity(intention);
         });
+
+        //PHONENUMBER
         imgPhonenumber.setOnClickListener(v -> {
             intention = new Intent(Intent.ACTION_DIAL);
-            intention.setData(Uri.parse("tel:"+txtPhonenumber.getText()));
+            intention.setData(Uri.parse("tel:" + txtPhonenumber.getText()));
+            startActivity(intention);
+        });
+
+        //ADDRESS
+        imgAddress.setOnClickListener(v -> {
+            intention = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + txtAddress.getText().toString()));
+            intention.setPackage("com.google.android.apps.maps");
+            startActivity(intention);
+        });
+
+        //WEB
+        imgWeb.setOnClickListener(v -> {
+            String url = txtWeb.getText().toString();
+            if (!url.startsWith("http://") && !url.startsWith("https://")) url = "http://" + url;
+            intention = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intention);
         });
     }
