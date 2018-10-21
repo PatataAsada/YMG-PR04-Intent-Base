@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -23,6 +25,7 @@ import androidx.core.app.ActivityCompat;
 import es.iessaladillo.pedrojoya.pr04.R;
 import es.iessaladillo.pedrojoya.pr04.data.local.Database;
 import es.iessaladillo.pedrojoya.pr04.data.local.model.Avatar;
+import es.iessaladillo.pedrojoya.pr04.ui.avatar.AvatarActivity;
 import es.iessaladillo.pedrojoya.pr04.utils.ValidationUtils;
 
 @SuppressWarnings("WeakerAccess")
@@ -69,12 +72,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void avatarListeners() {
-        imgAvatar.setOnClickListener(v -> {
+        imgAvatar.setOnClickListener(this::changeAvatar);
+        lblAvatar.setOnClickListener(this::changeAvatar);
+    }
 
-        });
-        lblAvatar.setOnClickListener(v -> {
+    private void changeAvatar(View v) {
+        intention = new Intent(v.getContext(), AvatarActivity.class);
+        intention.putExtra("EXTRA_AVATAR", (Avatar) imgAvatar.getTag());
+        startActivityForResult(intention, intention.getIntExtra("EXTRA_AVATAR", 1));
 
-        });
+        setAvatar(getIntent().getParcelableExtra("EXTRA_AVATAR"));
+    }
+
+    private void setAvatar(Avatar extra_avatar) {
+        imgAvatar.setTag(extra_avatar.getId());
+        imgAvatar.setImageResource(extra_avatar.getImageResId());
+        lblAvatar.setText(extra_avatar.getName());
     }
 
     private void iconListeners() {
@@ -295,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
     private void setDefault(ImageView imgAvatar, TextView nameAvatar) {
         Avatar defAvatar = Database.getInstance().getDefaultAvatar();
         imgAvatar.setImageResource(defAvatar.getImageResId());
-        imgAvatar.setTag(defAvatar.getImageResId());
+        imgAvatar.setTag(defAvatar);
         nameAvatar.setText(defAvatar.getName());
     }
 
