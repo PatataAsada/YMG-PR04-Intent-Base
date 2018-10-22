@@ -1,10 +1,11 @@
 package es.iessaladillo.pedrojoya.pr04.ui.main;
 
+import android.app.VoiceInteractor;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -20,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import es.iessaladillo.pedrojoya.pr04.R;
@@ -31,6 +33,8 @@ import es.iessaladillo.pedrojoya.pr04.utils.ValidationUtils;
 @SuppressWarnings("WeakerAccess")
 public class MainActivity extends AppCompatActivity {
 
+    final int PICK_AVATAR_REQUEST = 1;
+    private Avatar avatar = Database.getInstance().queryAvatar(1);
     private TextView lblAvatar;
     private ImageView imgAvatar;
     private TextView lblName;
@@ -67,8 +71,25 @@ public class MainActivity extends AppCompatActivity {
         //Icon press listeners.
         iconListeners();
 
+        //IME Option
+        imeListener();
+
         //When pressing avatar image or name.
         avatarListeners();
+    }
+
+    private void imeListener() {
+        //When pressing IME done button.
+        txtWeb.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                save();
+                InputMethodManager imm =
+                        (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                Objects.requireNonNull(imm).hideSoftInputFromWindow(v.getWindowToken(), 0);
+                return true;
+            }
+            return false;
+        });
     }
 
     private void avatarListeners() {
@@ -78,10 +99,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void changeAvatar(View v) {
         intention = new Intent(v.getContext(), AvatarActivity.class);
-        intention.putExtra("EXTRA_AVATAR", (Avatar) imgAvatar.getTag());
-        startActivityForResult(intention, intention.getIntExtra("EXTRA_AVATAR", 1));
 
-        setAvatar(getIntent().getParcelableExtra("EXTRA_AVATAR"));
+        intention.putExtra("EXTRA_AVATAR", avatar);
+        startActivityForResult(intention, PICK_AVATAR_REQUEST);
+
+        onActivityResult(PICK_AVATAR_REQUEST, RESULT_OK, intention);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_AVATAR_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                avatar = Database.getInstance().queryAvatar(((Avatar) Objects.requireNonNull(data).getParcelableExtra("EXTRA_AVATAR")).getId());
+                setAvatar(avatar);
+            }
+        }
     }
 
     private void setAvatar(Avatar extra_avatar) {
@@ -233,18 +266,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        //When pressing IME done button.
-        txtWeb.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                save();
-                InputMethodManager imm =
-                        (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                Objects.requireNonNull(imm).hideSoftInputFromWindow(v.getWindowToken(), 0);
-                return true;
-            }
-            return false;
-        });
     }
 
     private void focusListeners() {
@@ -308,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
     private void setDefault(ImageView imgAvatar, TextView nameAvatar) {
         Avatar defAvatar = Database.getInstance().getDefaultAvatar();
         imgAvatar.setImageResource(defAvatar.getImageResId());
-        imgAvatar.setTag(defAvatar);
+        imgAvatar.setTag(defAvatar.getImageResId());
         nameAvatar.setText(defAvatar.getName());
     }
 

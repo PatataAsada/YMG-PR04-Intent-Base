@@ -15,9 +15,8 @@ import es.iessaladillo.pedrojoya.pr04.utils.ResourcesUtils;
 
 public class AvatarActivity extends AppCompatActivity {
 
-    private Intent extraAvatar;
-    private Avatar actualAvatar;
-
+    private Intent extra_avatar;
+    private Avatar avatar;
     private TextView lblAvatar1;
     private ImageView imgAvatar1;
     private TextView lblAvatar2;
@@ -35,20 +34,20 @@ public class AvatarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_avatar);
-        initIntent();
         initViews();
         initListeners();
+        initIntent();
     }
 
     private void initIntent() {
-        extraAvatar = getIntent();
-        actualAvatar = extraAvatar.getParcelableExtra("EXTRA_AVATAR");
-        selectAvatar(actualAvatar);
+        extra_avatar = getIntent();
+        avatar = extra_avatar.getParcelableExtra("EXTRA_AVATAR");
+        selectedAvatar((int) avatar.getId());
     }
 
     @SuppressLint("ResourceType")
-    private void selectAvatar(Avatar actualAvatar) {
-        switch (actualAvatar.getId()){
+    private void selectedAvatar(int avatarId) {
+        switch (avatarId) {
             case 1:
                 selectImageView(imgAvatar1);
                 break;
@@ -86,9 +85,9 @@ public class AvatarActivity extends AppCompatActivity {
     }
 
     private void returnAvatar(int selected) {
-        extraAvatar = new Intent();
-        extraAvatar.putExtra("EXTRA_AVATAR",Database.getInstance().queryAvatar(selected));
-        setResult(RESULT_OK, extraAvatar);
+        extra_avatar = new Intent();
+        extra_avatar.putExtra("EXTRA_AVATAR", Database.getInstance().queryAvatar(selected));
+        setResult(RESULT_OK, extra_avatar);
         finish();
     }
 

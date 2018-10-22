@@ -21,6 +21,6 @@
     <string name="txtWeb_h">(web)</string>
     <string name="imgWeb_desc">Web icon</string>
     <string name="avatar_desc">avatar icon</string>
-    <string name="activity_avatar_ratio">2000:1775</string>
+    <string name="activity_avatar_ratio">2000:1900</string>
     <!-- -->
 </resources>
