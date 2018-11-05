@@ -125,9 +125,9 @@ public class MainActivity extends AppCompatActivity {
     private void iconListeners() {
         //EMAIL
         imgEmail.setOnClickListener(v -> {
-            // DEBES COMPROBAR QUE ES UN EMAIL VÁLIDO (LO MISMO EN EL RESTO DE img)
-            // HAZ UN MÉTODO.
             // In english please.
+            // HAZ UN MÉTODO.
+            // DEBES COMPROBAR QUE ES UN EMAIL VÁLIDO (LO MISMO EN EL RESTO DE img)
             // Y SI NO HAY APLICACIÓN PARA EMAILS¿? DARÁ UN ERROR.
             intention = new Intent(Intent.ACTION_SENDTO);
             intention.setData(Uri.parse("mailto:" + txtEmail.getText()));
