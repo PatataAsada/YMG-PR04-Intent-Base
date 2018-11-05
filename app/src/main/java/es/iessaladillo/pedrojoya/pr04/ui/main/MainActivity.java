@@ -1,11 +1,9 @@
 package es.iessaladillo.pedrojoya.pr04.ui.main;
 
-import android.app.VoiceInteractor;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -118,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setAvatar(Avatar extra_avatar) {
+        // SEGÚN EL TEST DEBES GUARDAR EN EL TAG EL resId DE LA IMAGEN DEL AVATAR.
         imgAvatar.setTag(extra_avatar.getId());
         imgAvatar.setImageResource(extra_avatar.getImageResId());
         lblAvatar.setText(extra_avatar.getName());
@@ -126,6 +125,10 @@ public class MainActivity extends AppCompatActivity {
     private void iconListeners() {
         //EMAIL
         imgEmail.setOnClickListener(v -> {
+            // In english please.
+            // HAZ UN MÉTODO.
+            // DEBES COMPROBAR QUE ES UN EMAIL VÁLIDO (LO MISMO EN EL RESTO DE img)
+            // Y SI NO HAY APLICACIÓN PARA EMAILS¿? DARÁ UN ERROR.
             intention = new Intent(Intent.ACTION_SENDTO);
             intention.setData(Uri.parse("mailto:" + txtEmail.getText()));
             startActivity(intention);
@@ -133,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
         //PHONENUMBER
         imgPhonenumber.setOnClickListener(v -> {
+            // HAZ UN MÉTODO
             intention = new Intent(Intent.ACTION_DIAL);
             intention.setData(Uri.parse("tel:" + txtPhonenumber.getText()));
             startActivity(intention);
@@ -140,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
         //ADDRESS
         imgAddress.setOnClickListener(v -> {
+            // HAZ UN MÉTODO
             intention = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + txtAddress.getText().toString()));
             intention.setPackage("com.google.android.apps.maps");
             startActivity(intention);
@@ -147,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
         //WEB
         imgWeb.setOnClickListener(v -> {
+            // HAZ UN MÉTODO
             String url = txtWeb.getText().toString();
             if (!url.startsWith("http://") && !url.startsWith("https://")) url = "http://" + url;
             intention = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -205,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // ESTE CÓDIGO ES PRÁCTICAMENTE IGUAL QUE EL ANTERIOR. HAZ UN MÉTODO.
                 if (!ValidationUtils.isValidPhone(txtPhonenumber.getText().toString())) {
                     txtPhonenumber.setError(getString(R.string.main_invalid_data));
                     lblPhonenumber.setEnabled(false);
@@ -229,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (count == 0) {
+                    // ESTE CÓDIGO ES PRÁCTICAMENTE IGUAL QUE EL ANTERIOR. HAZ UN MÉTODO.
                     txtAddress.setError(getString(R.string.main_invalid_data));
                     lblAddress.setEnabled(false);
                     imgAddress.setEnabled(false);
@@ -251,6 +259,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // ESTE CÓDIGO ES PRÁCTICAMENTE IGUAL QUE EL ANTERIOR. HAZ UN MÉTODO.
                 if (!ValidationUtils.isValidUrl(txtWeb.getText().toString())) {
                     txtWeb.setError(getString(R.string.main_invalid_data));
                     lblWeb.setEnabled(false);

@@ -41,6 +41,7 @@ public class AvatarActivity extends AppCompatActivity {
 
     private void initIntent() {
         extra_avatar = getIntent();
+        // DEFINE UNA CONSTANTE PARA EXTRA_AVATAR
         avatar = extra_avatar.getParcelableExtra("EXTRA_AVATAR");
         selectedAvatar((int) avatar.getId());
     }
